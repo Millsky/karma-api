@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  karma-api:
+    depends_on:
+      - postgres
+    links:
+      - "postgres"
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      PGDATABASE: ${POSTGRES_DB}
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGHOST: "postgres"
+  postgres:
+    build: ./postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - /var/lib/postgresql/data
