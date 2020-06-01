@@ -1,13 +1,11 @@
 const Koa = require('koa');
 const Router = require('koa-router');
 const bodyParser = require('koa-bodyparser');
-const { Pool } = require('pg')
+const { Pool } = require('pg');
 const app = new Koa();
 const router = new Router({
   prefix: '/api/v1/'
 });
-
-let db = null;
 
 const pool = new Pool();
 
@@ -16,7 +14,7 @@ console.log('Karma API is up and running!');
 const users = {};
 
 router
-  .post('user', async (ctx, next) => {
+  .post('user', async (ctx) => {
       const { email } = ctx.request.body || {};
       console.log('Adding User', email);
       try {
@@ -28,7 +26,7 @@ router
       }
       ctx.body = ctx.body || null;
   })
-  .get('user/:id', async (ctx, next) => {
+  .get('user/:id', async (ctx) => {
       const { id } = ctx.params;
       console.log('Getting User', id);
       try {
@@ -39,7 +37,7 @@ router
       }
       ctx.body = ctx.body || null;
   })
-  .patch('user/:id', async (ctx, next) => {
+  .patch('user/:id', async (ctx) => {
     const { id } = ctx.params;
     console.log('Updating User', id);
     const { name, email } = ctx.request.body || {};
@@ -49,7 +47,7 @@ router
       email,
     };
   })
-  .get('user/:id/karma', async (ctx, next) => {
+  .get('user/:id/karma', async (ctx) => {
     const { id } = ctx.params;
     console.log('Getting Users Karma', id);
     try {
@@ -60,7 +58,7 @@ router
     }
     ctx.body = ctx.body || null;
   })
-  .post('karma', async (ctx, next) => {
+  .post('karma', async (ctx) => {
     const { from_user_id, message, to_user_id } = ctx.request.body || {};
     console.log('Adding Karma', id);
     try {
@@ -73,7 +71,7 @@ router
       message,
       to_user_id: id,
     }
-  })
+  });
 
 app.use(bodyParser());
 app.use(router.routes());
