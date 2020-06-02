@@ -72,7 +72,7 @@ Adds a group
 #### RESPONSE BODY
 
 ```JSON
-e799061c-ce77-4082-9d05-8a9dde8a96c4
+"e799061c-ce77-4082-9d05-8a9dde8a96c4"
 ```
 
 ### GET `api/v1/group/${group_id}`
@@ -117,7 +117,7 @@ Adds an entry to the users Karma
 {
   "from_user_id": "e799061c-ce77-4082-9d05-8a9dde8a96c4",
   "to_user_id": "f799061c-de77-7082-5e05-2a9ffe4a91c5",
-  "group_id": "g799061c-de77-9082-6q90-4v9nnq4e91c5"
+  "group_id": "g799061c-de77-9082-6q90-4v9nnq4e91c5",
   "message": "some string here"
 }
 ```
