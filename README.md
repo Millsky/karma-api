@@ -57,6 +57,35 @@ Retrieves the user
 }
 ```
 
+### POST `api/v1/group`
+
+Adds a group
+
+#### REQUEST BODY
+
+```JSON
+{
+ "name": "My Group"
+}
+```
+
+#### RESPONSE BODY
+
+```JSON
+e799061c-ce77-4082-9d05-8a9dde8a96c4
+```
+
+### GET `api/v1/group/${group_id}`
+
+#### RESPONSE BODY
+
+```JSON
+{
+    "group_id": "2a62f4bd-7a81-429c-8b93-7fe9d2fdd5b6",
+    "group_name": "cool",
+    "created_at": "2020-06-02T21:03:14.982Z"
+}
+```
 ### GET `api/v1/user/${user_id}/karma`
 
 Retrieves the users karma
@@ -64,7 +93,7 @@ Retrieves the users karma
 #### RESPONSE BODY:
 
 ```JSON
-
+[{}, {}]
 ```
 
 ### POST `api/v1/karma`
