@@ -32,6 +32,18 @@ CREATE TABLE user_groups (
 );
 
 
+CREATE USER app_user WITH password 'pleaseupdateme';
+
+CREATE ROLE karma_writer;
+GRANT INSERT,UPDATE,DELETE ON groups,user_groups,karma,users TO karma_writer;
+
+CREATE ROLE karma_reader;
+GRANT SELECT ON users,karma,user_groups,groups TO karma_reader;
+
+GRANT karma_reader TO app_user;
+GRANT karma_writer TO app_user;
+
+
 CREATE OR REPLACE FUNCTION insert_user(varchar, varchar, varchar) RETURNS uuid AS $$
     DECLARE
         gid uuid;

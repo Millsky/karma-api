@@ -8,7 +8,19 @@ const router = new Router({
   prefix: '/api/v1/'
 });
 
-const pool = new Pool();
+const read_pool = new Pool({
+    user: 'app_user',
+    max: 50,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000,
+});
+
+const write_pool = new Pool({
+    user: 'app_user',
+    max: 10,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000,
+});
 
 console.log('Karma API is up and running!');
 
@@ -17,8 +29,8 @@ router
       const { email, first_name, last_name } = ctx.request.body || {};
       console.log('Adding User With:', email);
       try {
-        const { rows } = await pool.query(`SELECT * FROM insert_user($1, $2, $3)`, [email, first_name, last_name]);
-        const res = await pool.query(`SELECT * FROM users WHERE user_id = $1`, [
+        const { rows } = await write_pool.query(`SELECT * FROM insert_user($1, $2, $3)`, [email, first_name, last_name]);
+        const res = await read_pool_pool.query(`SELECT * FROM users WHERE user_id = $1`, [
             rows[0].insert_user,
         ]);
         ctx.body = res.rows[0];
@@ -32,7 +44,7 @@ router
       const { id } = ctx.params;
       console.log('Getting User', id);
       try {
-        const res = await pool.query(`SELECT * FROM get_user($1)`, [id]);
+        const res = await read_pool.query(`SELECT * FROM get_user($1)`, [id]);
         ctx.body = res.rows[0];
       } catch (e) {
         console.log(e);
@@ -44,7 +56,7 @@ router
     const { id } = ctx.params;
     console.log('Getting Users Karma', id);
     try {
-      const res = await pool.query(`SELECT * FROM get_user_karma($1)`, [id]);
+      const res = await read_pool.query(`SELECT * FROM get_user_karma($1)`, [id]);
       ctx.body = res.rows;
     } catch (e) {
       console.log(e);
@@ -56,7 +68,7 @@ router
     let karma_id = null;
     console.log('Adding to a users karma');
     try {
-      const res = await pool.query(`SELECT * FROM insert_karma($1, $2, $3, $4)`, [from_user_id, to_user_id, group_id, message]);
+      const res = await write_pool.query(`SELECT * FROM insert_karma($1, $2, $3, $4)`, [from_user_id, to_user_id, group_id, message]);
       karma_id = res.rows[0].insert_karma;
       ctx.body = {
         from_user_id,
@@ -74,7 +86,7 @@ router
     const { name } = ctx.request.body || {};
     console.log('Adding a new group');
     try {
-        const res = await pool.query(`SELECT * FROM insert_group($1)`, [name]);
+        const res = await write_pool.query(`SELECT * FROM insert_group($1)`, [name]);
         ctx.body = res.rows[0].insert_group;
     } catch (e) {
       console.log(e);
@@ -86,7 +98,7 @@ router
     const { id } = ctx.params;
     console.log('Getting a group');
     try {
-      const res = await pool.query('SELECT * FROM get_group($1)', [id]);
+      const res = await read_pool.query('SELECT * FROM get_group($1)', [id]);
       ctx.body = res.rows[0];
     } catch (e) {
       console.log(e);

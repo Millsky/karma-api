@@ -11,8 +11,8 @@ services:
       - "8080:8080"
     environment:
       PGDATABASE: ${POSTGRES_DB}
-      PGUSER: ${POSTGRES_USER}
-      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGUSER: 'app_user'
+      PGPASSWORD: 'pleaseupdateme'
       PGHOST: "postgres"
   postgres:
     build: ./postgres
